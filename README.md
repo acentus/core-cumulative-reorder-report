@@ -1,2 +1,2 @@
-# core-cummulative-reorder-report
-core-cummulative-reorder-report
+# core-cumulative-reorder-report
+core-cumulative-reorder-report
