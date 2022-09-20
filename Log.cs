@@ -8,7 +8,7 @@ namespace CoreCumulativeReorderReport
         public static void write(string str)
         {
             string logfile = "";
-            string filename = "CoreFieldCommissionReport_Log_" + DateTime.Now.Year.ToString() + "_" + DateTime.Now.Month.ToString() + "_" + DateTime.Now.Day.ToString() + ".txt";
+            string filename = "CoreCumulativeReorderReport_Log_" + DateTime.Now.Year.ToString() + "_" + DateTime.Now.Month.ToString() + "_" + DateTime.Now.Day.ToString() + ".txt";
             string appPath = AppDomain.CurrentDomain.BaseDirectory + "logs";
             logfile = Path.Combine(appPath, filename);
 
