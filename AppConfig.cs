@@ -1,4 +1,10 @@
-﻿namespace CoreCumulativeReorderReport
+﻿//
+// Copyright (c) 2022 by Acentus
+// Developed by: Luis Cabrera
+// gigocabrera@outlook.com
+//
+
+namespace CoreCumulativeReorderReport
 {
     public class AppConfig
     {
