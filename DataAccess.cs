@@ -124,7 +124,7 @@ namespace CoreCumulativeReorderReport
             sb.Append("    FROM AR1ORDW WO ");
             sb.Append("    WHERE WO.LASTDATEBILLED BETWEEN DATEADD(mm, DATEDIFF(mm, 0, GETDATE()), 0)  AND DATEADD(second, -1, DATEADD(month, DATEDIFF(month, 0, GETDATE()) + 1, 0)) ");
             sb.Append("        AND WO.BILLTYPE = 'P' ");
-            sb.Append("        AND WO.ITEMID IN(1957, 1950, 1951, 1962) ");
+            sb.Append("        AND WO.ITEMID IN(720,1658,1960,1955,1964,1965) ");
             sb.Append("        AND WO.RECORDTYPE = 'M' ");
             sb.Append("        AND WO.PATIENTID IN( ");
             sb.Append("            SELECT ID FROM AR1PAT PAT WHERE PAT.PATIENTCATEGORY = 'CGM' AND PAT.PATIENTSTATUS = 'A' AND PAT.SALESID = ").Append(repid);
@@ -136,7 +136,7 @@ namespace CoreCumulativeReorderReport
             sb.Append("    FROM AR1ORDW WO ");
             sb.Append("    WHERE WO.LASTDATEBILLED BETWEEN DATEADD(MONTH, DATEDIFF(MONTH, 0, DATEADD(MONTH, -3, GETDATE())), 0)  AND DATEADD(second, -1, DATEADD(month, DATEDIFF(month, 0, GETDATE()) + 1, 0)) ");
             sb.Append("        AND WO.BILLTYPE = 'P' ");
-            sb.Append("        AND WO.ITEMID IN(1957, 1950, 1951, 1962) ");
+            sb.Append("        AND WO.ITEMID IN(720,1658,1960,1955,1964,1965) ");
             sb.Append("        AND WO.RECORDTYPE = 'Q' ");
             sb.Append("        AND WO.PATIENTID IN( ");
             sb.Append("            SELECT ID FROM AR1PAT PAT WHERE PAT.PATIENTCATEGORY = 'CGM' AND PAT.PATIENTSTATUS = 'A' AND PAT.SALESID = ").Append(repid);
