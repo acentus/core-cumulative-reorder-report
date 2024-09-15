@@ -7,10 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.IO;
 using System.Net.Mail;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CoreCumulativeReorderReport
@@ -20,102 +17,6 @@ namespace CoreCumulativeReorderReport
     /// </summary>
     public abstract class Utils
     {
-        #region Conversion Methods
-
-        public static int StringToInt(string value)
-        {
-            try
-            {
-                return System.Convert.ToInt32(value);
-            }
-            catch (Exception)
-            {
-                return -1;
-            }
-        }
-
-        public static bool IsEmpty(string value)
-        {
-            return ((value == null) || (value.Trim().Equals(String.Empty)));
-        }
-
-        #endregion
-
-        #region FormatDate(DateTime date)
-
-        public static string FormatDate(DateTime date)
-        {
-            return FormatDate(date, "/");
-        }
-
-        #endregion
-
-        #region FormatDate(DateTime date, string separator)
-
-        public static string FormatDate(DateTime date, string separator)
-        {
-            return string.Format("{0:D4}" + separator + "{1:D2}" + separator + "{2:D2}", date.Year, date.Month, date.Day);
-        }
-
-        #endregion
-
-        #region FormatTime(DateTime date)
-
-        public static string FormatTime(DateTime date)
-        {
-            return FormatTime(date, ":");
-        }
-
-        #endregion
-
-        #region FormatTime(DateTime date, string separator)
-
-        public static string FormatTime(DateTime date, string separator)
-        {
-            return string.Format("{0:D2}" + separator + "{1:D2}" + separator + "{2:D2}", date.Hour, date.Minute, date.Second);
-        }
-
-        #endregion
-
-        #region FormatDateTime(DateTime date)
-
-        public static string FormatDateTime(DateTime date)
-        {
-            return FormatDate(date) + " " + FormatTime(date);
-        }
-
-        #endregion
-
-        #region FormatDateTime(DateTime date, string dateSeparator, string timeSeparator)
-
-        public static string FormatDateTime(DateTime date, string dateSeparator, string timeSeparator)
-        {
-            return FormatDate(date, dateSeparator) + " " + FormatTime(date, timeSeparator);
-        }
-
-        #endregion
-
-        #region DateTimeToString(DateTime dt)
-
-        public static string DateTimeToString(DateTime dt)
-        {
-            return (dt == DateTime.MinValue) ? string.Empty : dt.ToString("MM/dd/yyyy");
-        }
-
-        #endregion
-
-        #region GetTemplate(string strTemplateName)
-
-        public static string GetTemplate(string strTemplateName)
-        {
-            string loc = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            string filepath = loc + "\\HtmlTemplates\\" + strTemplateName;
-            string html = System.IO.File.ReadAllText(filepath);
-            return html;
-        }
-
-        #endregion
-
         #region SendEmail(string EmailMessage, string emailTo, string EmailSubject)
 
         public static void SendEmail(string attachmentName)

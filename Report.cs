@@ -5,6 +5,7 @@
 //
 
 using System;
+using System.Configuration;
 using System.Data;
 using System.IO;
 using System.Threading.Tasks;
@@ -13,6 +14,9 @@ namespace CoreCumulativeReorderReport
 {
     class Report
     {
+        JobCenterHistoryLogger logHeader = new JobCenterHistoryLogger();
+        JobCenterHistoryLoggerDetails logDetails = new JobCenterHistoryLoggerDetails();
+
         private DataAccess db = new DataAccess();
 
         public async Task RunReport()
@@ -20,12 +24,24 @@ namespace CoreCumulativeReorderReport
             try
             {
                 //
+                // START LOGGING
+                //
+                logHeader = new JobCenterHistoryLogger(DateTime.Now, DateTime.Now, JobCenterHistoryLogger.StatusEnum.Running, "Report started");
+                logDetails = new JobCenterHistoryLoggerDetails(logHeader.HistoryId, "Test Mode: " + ConfigurationManager.AppSettings["TestMode"]);
+                logDetails = new JobCenterHistoryLoggerDetails(logHeader.HistoryId, "Subject: " + ConfigurationManager.AppSettings["subject"]);
+                logDetails = new JobCenterHistoryLoggerDetails(logHeader.HistoryId, "Email From: " + ConfigurationManager.AppSettings["emailFrom"]);
+                logDetails = new JobCenterHistoryLoggerDetails(logHeader.HistoryId, "Email To: " + ConfigurationManager.AppSettings["emailTo"]);
+                logDetails = new JobCenterHistoryLoggerDetails(logHeader.HistoryId, "Report Date: " + DateTime.Today.ToShortDateString());
+
+                //
                 // GET LIST OF SALES REPS
                 //
                 DataTable dtReps = db.GetSalesReps();
                 if (dtReps != null && dtReps.Rows.Count > 0)
                 {
                     Log.write("Total active sales reps: " + dtReps.Rows.Count.ToString());
+
+                    logDetails = new JobCenterHistoryLoggerDetails(logHeader.HistoryId, "Total active sales reps: " + dtReps.Rows.Count.ToString());
 
                     string filename = "cumulative-reorder-report_" + DateTime.Now.Year.ToString() + "_" + DateTime.Now.Month.ToString() + "_" + DateTime.Now.Day.ToString() + ".csv";
                     string appPath = AppDomain.CurrentDomain.BaseDirectory + "files";
@@ -71,11 +87,31 @@ namespace CoreCumulativeReorderReport
 
                     var bytesFromFile = System.IO.File.ReadAllBytes(csvfile);
                     await Utils.SendEmailWithModernAuthentication(bytesFromFile, filename);
+
+                    logDetails = new JobCenterHistoryLoggerDetails(logHeader.HistoryId, "Email: Sent Successfully");
+
+                    logHeader.EndTime = DateTime.Now;
+                    logHeader.Message = "Report Completed";
+                    logHeader.Status = JobCenterHistoryLogger.StatusEnum.Success;
+                    logHeader.Update();
+                }
+                else
+                {
+                    // No data was returned
+                    logHeader.EndTime = DateTime.Now;
+                    logHeader.Message = "No data found";
+                    logHeader.Status = JobCenterHistoryLogger.StatusEnum.Success;
+                    logHeader.Update();
                 }
             }
             catch (Exception ex)
             {
-                Log.write(string.Format("EXCEPTION: " + ex.Message));
+                Log.write(string.Format("REPORT EXCEPTION: " + ex.Message));
+
+                logHeader.EndTime = DateTime.Now;
+                logHeader.Status = JobCenterHistoryLogger.StatusEnum.Error;
+                logHeader.Message = ex.Message;
+                logHeader.Update();
                 throw;
             }
         }
