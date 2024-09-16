@@ -90,7 +90,7 @@ namespace CoreCumulativeReorderReport
             sb.Append("LEFT JOIN AR1PAT PAT ON PAT.ID = WO.PATIENTID ");
             sb.Append("WHERE WO.NOTESEXPIREDATE < DATEADD (dd, -1, DATEADD(mm, DATEDIFF(mm, 0, GETDATE()) + 1, 0)) ");
             sb.Append("AND PAT.PATIENTSTATUS = 'A' ");
-            sb.Append("AND WO.BILLTYPE = 'M' ");
+            sb.Append("AND WO.BILLTYPE IN('M','Q') ");
             sb.Append("AND PAT.PATIENTCATEGORY = 'CGM' ");
             sb.Append("AND WO.NOTESEXPIREDATE < WO.LASTDATEBILLED ");
             sb.Append("AND PAT.SALESID = " + repid + "; ");
@@ -106,7 +106,7 @@ namespace CoreCumulativeReorderReport
             sb.Append("LEFT JOIN AR1PAT PAT ON PAT.ID = WO.PATIENTID ");
             sb.Append("WHERE WO.CMNEXPIRE < DATEADD (dd, -1, DATEADD(mm, DATEDIFF(mm, 0, GETDATE()) + 1, 0)) ");
             sb.Append("AND PAT.PATIENTSTATUS = 'A' ");
-            sb.Append("AND WO.BILLTYPE = 'M' ");
+            sb.Append("AND WO.BILLTYPE IN('M','Q') ");
             sb.Append("AND PAT.PATIENTCATEGORY = 'CGM' ");
             sb.Append("AND WO.CMNEXPIRE < WO.LASTDATEBILLED ");
             sb.Append("AND PAT.SALESID = " + repid + "; ");
