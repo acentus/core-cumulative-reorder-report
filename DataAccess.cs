@@ -7,7 +7,7 @@
 using System;
 using System.Configuration;
 using System.Data;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Text;
 
 namespace CoreCumulativeReorderReport
@@ -16,10 +16,8 @@ namespace CoreCumulativeReorderReport
     {
         string conn = ConfigurationManager.ConnectionStrings["arxConnection"].ToString();
 
-        static DateTime startMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-        static DateTime endMonth = startMonth.AddMonths(1).AddTicks(-1);
-        static DateTime start90days = startMonth.AddMonths(-3);
-        static DateTime end90days = start90days.AddMonths(3).AddTicks(-1);
+        //static DateTime start90days = App.FirstDayMonth.AddMonths(-3);
+        //static DateTime end90days = start90days.AddMonths(3).AddTicks(-1);
 
         public DataTable GetDataTable(string sql)
         {
@@ -88,7 +86,7 @@ namespace CoreCumulativeReorderReport
             sb.Append("    COUNT(DISTINCT(WO.PATIENTID)) ");
             sb.Append("FROM AR1ORDW WO ");
             sb.Append("LEFT JOIN AR1PAT PAT ON PAT.ID = WO.PATIENTID ");
-            sb.Append("WHERE WO.NOTESEXPIREDATE < DATEADD (dd, -1, DATEADD(mm, DATEDIFF(mm, 0, GETDATE()) + 1, 0)) ");
+            sb.Append("WHERE WO.NOTESEXPIREDATE < '").Append(App.LastDayMonth).Append("' ");
             sb.Append("AND PAT.PATIENTSTATUS = 'A' ");
             sb.Append("AND WO.BILLTYPE IN('M','Q') ");
             sb.Append("AND PAT.PATIENTCATEGORY = 'CGM' ");
@@ -104,7 +102,7 @@ namespace CoreCumulativeReorderReport
             sb.Append("    COUNT(DISTINCT(WO.PATIENTID)) ");
             sb.Append("FROM AR1ORDW WO ");
             sb.Append("LEFT JOIN AR1PAT PAT ON PAT.ID = WO.PATIENTID ");
-            sb.Append("WHERE WO.CMNEXPIRE < DATEADD (dd, -1, DATEADD(mm, DATEDIFF(mm, 0, GETDATE()) + 1, 0)) ");
+            sb.Append("WHERE WO.CMNEXPIRE < '").Append(App.LastDayMonth).Append("' ");
             sb.Append("AND PAT.PATIENTSTATUS = 'A' ");
             sb.Append("AND WO.BILLTYPE IN('M','Q') ");
             sb.Append("AND PAT.PATIENTCATEGORY = 'CGM' ");
@@ -122,7 +120,7 @@ namespace CoreCumulativeReorderReport
             sb.Append("    SELECT ");
             sb.Append("        COUNT(DISTINCT(WO.PATIENTID)) AS TOTAL ");
             sb.Append("    FROM AR1ORDW WO ");
-            sb.Append("    WHERE WO.LASTDATEBILLED BETWEEN DATEADD(mm, DATEDIFF(mm, 0, GETDATE()), 0)  AND DATEADD(second, -1, DATEADD(month, DATEDIFF(month, 0, GETDATE()) + 1, 0)) ");
+            sb.Append("    WHERE WO.LASTDATEBILLED BETWEEN '").Append(App.FirstDayMonth).Append("' AND '").Append(App.LastDayMonth).Append("' ");
             sb.Append("        AND WO.BILLTYPE = 'P' ");
             sb.Append("        AND WO.ITEMID IN(720,1658,1960,1955,1964,1965) ");
             sb.Append("        AND WO.RECORDTYPE = 'M' ");
@@ -134,7 +132,7 @@ namespace CoreCumulativeReorderReport
             sb.Append("    SELECT ");
             sb.Append("        COUNT(DISTINCT(WO.PATIENTID)) AS TOTAL ");
             sb.Append("    FROM AR1ORDW WO ");
-            sb.Append("    WHERE WO.LASTDATEBILLED BETWEEN DATEADD(MONTH, DATEDIFF(MONTH, 0, DATEADD(MONTH, -3, GETDATE())), 0)  AND DATEADD(second, -1, DATEADD(month, DATEDIFF(month, 0, GETDATE()) + 1, 0)) ");
+            sb.Append("    WHERE WO.LASTDATEBILLED BETWEEN '").Append(App.FirstDay3MonthsAgo).Append("' AND '").Append(App.LastDayMonth).Append("' ");
             sb.Append("        AND WO.BILLTYPE = 'P' ");
             sb.Append("        AND WO.ITEMID IN(720,1658,1960,1955,1964,1965) ");
             sb.Append("        AND WO.RECORDTYPE = 'Q' ");
@@ -152,7 +150,7 @@ namespace CoreCumulativeReorderReport
             sb.Append("    COUNT(DISTINCT(WO.PATIENTID)) AS TOTAL ");
             sb.Append("FROM AR1ORDW WO ");
             sb.Append("INNER JOIN AR1PAT PAT ON PAT.ID = WO.PATIENTID ");
-            sb.Append("WHERE WO.LASTDATEBILLED BETWEEN DATEADD(mm, DATEDIFF(mm, 0, GETDATE()), 0) AND EOMONTH(GETDATE()) ");
+            sb.Append("WHERE WO.LASTDATEBILLED BETWEEN '").Append(App.FirstDayMonth).Append("' AND '").Append(App.LastDayMonth).Append("' ");
             sb.Append("AND PAT.PATIENTCATEGORY = 'CGM' ");
             sb.Append("AND WO.BILLTYPE = 'P' ");
             sb.Append("AND PAT.PATIENTSTATUS = 'A' ");
