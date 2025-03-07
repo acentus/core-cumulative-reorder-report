@@ -16,9 +16,6 @@ namespace CoreCumulativeReorderReport
     {
         string conn = ConfigurationManager.ConnectionStrings["arxConnection"].ToString();
 
-        //static DateTime start90days = App.FirstDayMonth.AddMonths(-3);
-        //static DateTime end90days = start90days.AddMonths(3).AddTicks(-1);
-
         public DataTable GetDataTable(string sql)
         {
             using (SqlConnection cn = new SqlConnection(conn))

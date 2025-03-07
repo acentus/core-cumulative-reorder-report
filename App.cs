@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 
 namespace CoreCumulativeReorderReport
 {
@@ -6,25 +7,39 @@ namespace CoreCumulativeReorderReport
     {
         private static DateTime firstDayMonth;
         private static DateTime lastDayMonth;
+        //private static DateTime firstDayOfAccountingMonth;
+        //private static DateTime lastDayOfAccountingMonth;
         private static DateTime firstDay3MonthsAgo;
-        private static DateTime lastDay3MonthsAgo;
+
+        private static string ForceMonth = ConfigurationManager.AppSettings["ForceMonth"];
+        private static string MonthBack = ConfigurationManager.AppSettings["MonthBack"];
 
         static App()
         {
             DateTime dtToday = DateTime.Today;
-            DateTime firstDayOfAccountingMonth = Utils.GetFirstDay(dtToday);
-            DateTime lastDayOfAccountingMonth = Utils.GetLastDay(dtToday);
-            firstDayMonth = firstDayOfAccountingMonth;
-            lastDayMonth = lastDayOfAccountingMonth;
 
-            DateTime dt3MonthsAgo = DateTime.Today.AddMonths(-3);
-            DateTime firstDayOfAccounting3MonthsAgo = Utils.GetFirstDay(dtToday);
-            DateTime lastDayOfAccounting3MonthsAgo = Utils.GetLastDay(dtToday);
-            firstDay3MonthsAgo = firstDayOfAccounting3MonthsAgo;
-            lastDay3MonthsAgo = lastDayOfAccounting3MonthsAgo;
+            //firstDayOfAccountingMonth = Utils.GetFirstDay(dtToday);
+            //lastDayOfAccountingMonth = Utils.GetLastDay(dtToday);
+            
+            firstDayMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            lastDayMonth = firstDayMonth.AddTicks(-1);
 
-            Log.write("First Day Month: " + firstDayMonth.ToShortDateString());
-            Log.write("Last Day Month: " + lastDayMonth.ToShortDateString());
+            firstDay3MonthsAgo = firstDayMonth.AddMonths(-3);
+
+            //Log.write("firstDayOfAccountingMonth: " + firstDayOfAccountingMonth.ToString());
+            //Log.write("lastDayOfAccountingMonth: " + lastDayOfAccountingMonth.ToString());
+            Log.write("firstDayMonth: " + firstDayMonth.ToString());
+            Log.write("lastDayMonth: " + lastDayMonth.ToString());
+            Log.write("firstDay3MonthsAgo: " + firstDay3MonthsAgo.ToString());
+
+            if (ForceMonth == "True")
+            {
+                int backMonths = Convert.ToInt32(MonthBack);
+                firstDayMonth = firstDayMonth.AddMonths(-backMonths);
+                lastDayMonth = lastDayMonth.AddMonths(-backMonths);
+
+                Log.write("In FORCEMONTH mode. New dates: " + firstDayMonth + " to " + lastDayMonth);
+            }
         }
 
         public static DateTime FirstDayMonth
@@ -43,19 +58,27 @@ namespace CoreCumulativeReorderReport
             }
         }
 
+        //public static DateTime FirstDayAccountingMonth
+        //{
+        //    get
+        //    {
+        //        return firstDayOfAccountingMonth;
+        //    }
+        //}
+
+        //public static DateTime LastDayAccountingMonth
+        //{
+        //    get
+        //    {
+        //        return lastDayOfAccountingMonth;
+        //    }
+        //}
+
         public static DateTime FirstDay3MonthsAgo
         {
             get
             {
                 return firstDay3MonthsAgo;
-            }
-        }
-
-        public static DateTime LastDay3MonthsAgo
-        {
-            get
-            {
-                return lastDay3MonthsAgo;
             }
         }
     }
