@@ -22,7 +22,7 @@ namespace CoreCumulativeReorderReport
             //lastDayOfAccountingMonth = Utils.GetLastDay(dtToday);
             
             firstDayMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-            lastDayMonth = firstDayMonth.AddTicks(-1);
+            lastDayMonth = firstDayMonth.AddMonths(1).AddTicks(-1);
 
             firstDay3MonthsAgo = firstDayMonth.AddMonths(-3);
 
