@@ -55,7 +55,6 @@ namespace CoreCumulativeReorderReport
                 }
                 if (ccEmailAddresses != null && ccEmailAddresses.Count > 0)
                 {
-
                     foreach (var ccEmailAddress in ccEmailAddresses)
                     {
                         ccRecipients.Add(
